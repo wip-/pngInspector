@@ -17,32 +17,39 @@ namespace pngInspector
         static void Main(string[] args)
         {
             Console.WriteLine("pngInspector");
+            Sub(args);
+            Console.WriteLine();
+            Console.WriteLine("Press key to exit");
+            Console.ReadKey();
+        }
 
+
+        static private void Sub(string[] args)
+        {
             if (args.Length < 1)
             {
-                PrintUsage();
-                Environment.Exit(1);
+                Console.WriteLine("usage: pngInspector <input image path>");
+                return;
             }
-            
+
             var sourcePath = args[0];
 
             if (!File.Exists(sourcePath))
             {
                 Console.WriteLine("The source file you specified does not exist.");
-                Environment.Exit(1);
+                return;
             }
 
             var bitmap = new Bitmap(sourcePath);
-            int bitmapWidth  = bitmap.Width;
+            int bitmapWidth = bitmap.Width;
             int bitmapHeight = bitmap.Height;
-            
 
             BitmapData bitmapData = bitmap.LockBits(
                 Rectangle.FromLTRB(0, 0, bitmapWidth, bitmapHeight),
-	            ImageLockMode.ReadOnly,
+                ImageLockMode.ReadOnly,
                 bitmap.PixelFormat);
 
-            int bitmapStride     = bitmapData.Stride;
+            int bitmapStride = bitmapData.Stride;
             int bitmapComponents = GetComponentsNumber(bitmap.PixelFormat);
 
             var colorDictionary = new Dictionary<Color, int>();
@@ -51,7 +58,7 @@ namespace pngInspector
 
             Console.WriteLine();
             Console.WriteLine(sourcePath);
-            
+
             if (bitmap.PixelFormat == PixelFormat.Format8bppIndexed)
             {
                 for (int y = 0; y <= bitmapHeight - 1; y++)
@@ -103,11 +110,9 @@ namespace pngInspector
 
             ColorPalette palette = bitmap.Palette;
             Console.WriteLine(palette.Entries.Length + " colors in bitmap.Palette");
-
-            Console.WriteLine();
-            Console.WriteLine("Press key to exit");
-            Console.ReadKey();
+            
         }
+
 
         static private int GetComponentsNumber(PixelFormat pixelFormat)
         {
@@ -126,12 +131,6 @@ namespace pngInspector
                     Debug.Assert(false);
                     return 0;
             }
-        }
-
-        static private void PrintUsage()
-        {
-            Console.WriteLine();
-            Console.WriteLine("usage: pngInspector <input image path>");
         }
     }
 }
