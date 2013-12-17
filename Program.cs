@@ -82,9 +82,9 @@ namespace pngInspector
             }
             else
             {
-                for (int y = 0; y <= bitmapHeight - 1; y++)
+                for (int y = 0; y < bitmapHeight; y++)
                 {
-                    for (int x = 0; x <= bitmapWidth - 1; x++)
+                    for (int x = 0; x < bitmapWidth; x++)
                     {
                         Color color = Color.FromArgb(
                             Marshal.ReadInt32(bitmapData.Scan0, (bitmapStride * y) + (bitmapComponents * x)));
